@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<title>Dashboard</title>
+
+<style>
+
+body{
+    margin:0;
+    font-family:Arial, sans-serif;
+    height:100vh;
+
+    background-image:url("https://polinela.ac.id/wp-content/uploads/2025/02/gedung_fasilitas_smart_food_security_politeknik_negeri_lampung.jpg");
+    background-size:cover;
+    background-position:center;
+
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+}
+
+/* HEADER */
+
+.header{
+    margin-top:-80px;
+}
+
+h1{
+    font-size:70px;
+    color:white;
+    margin-bottom:5px;
+
+    text-shadow:
+    0px 5px 15px rgba(0,0,0,0.8),
+    0px 0px 25px rgba(255,255,255,0.5);
+}
+
+.subtitle{
+    font-size:28px;
+    color:white;
+    margin-top:5px;
+
+    text-shadow:
+    0px 5px 15px rgba(0,0,0,0.8);
+}
+
+/* MENU */
+
+.menu-section{
+    margin-top:90px;
+    display:flex;
+    gap:30px;
+}
+
+/* CARD */
+
+.card{
+    width:200px;
+    height:140px;
+
+    background:rgba(255,255,255,0.75);
+    backdrop-filter:blur(12px);
+
+    border-radius:20px;
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+
+    font-size:22px;
+    font-weight:bold;
+    color:black;
+
+    text-decoration:none;
+
+    box-shadow:0 20px 40px rgba(0,0,0,0.35);
+
+    transition:0.35s;
+}
+
+.card:hover{
+    transform:translateY(-10px) scale(1.05);
+    box-shadow:0 25px 50px rgba(0,0,0,0.5);
+    background:rgba(255,255,255,0.9);
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="header">
+<h1>Selamat Datang</h1>
+<div class="subtitle">Website Kami</div>
+</div>
+
+<div class="menu-section">
+
+<a class="card" href="/about/">
+Profil
+</a>
+
+<a class="card" href="/contacts/">
+Sosial Media
+</a>
+
+</div>
+
+</body>
+</html>
