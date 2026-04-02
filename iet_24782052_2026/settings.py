@@ -45,11 +45,11 @@ MIDDLEWARE = [
 ROOT_URLCONF = 'iet_24782052_2026.urls'
 
 
-# TEMPLATE
+# TEMPLATE (DITAMBAH DIRS)
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [BASE_DIR / 'templates'],  # 🔥 penting
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -65,11 +65,15 @@ TEMPLATES = [
 WSGI_APPLICATION = 'iet_24782052_2026.wsgi.application'
 
 
-# DATABASE
+# 🔥 DATABASE (POSTGRESQL)
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'smartcity_db',
+        'USER': 'postgres',
+        'PASSWORD': '12345678',  # ⚠️ ganti kalau beda
+        'HOST': 'localhost',
+        'PORT': '5432',
     }
 }
 
@@ -98,16 +102,13 @@ USE_I18N = True
 USE_TZ = True
 
 
-# STATIC FILES (gambar, css, js)
-
+# STATIC FILES
 STATIC_URL = '/static/'
 
-# lokasi folder static
 STATICFILES_DIRS = [
     BASE_DIR / "static",
 ]
 
-# lokasi collect static (opsional untuk production)
 STATIC_ROOT = BASE_DIR / "staticfiles"
 
 

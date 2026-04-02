@@ -49,7 +49,7 @@ ROOT_URLCONF = 'iet_24782052_2026.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [BASE_DIR / 'templates'],  # 🔥 tambahan biar fleksibel
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -65,11 +65,15 @@ TEMPLATES = [
 WSGI_APPLICATION = 'iet_24782052_2026.wsgi.application'
 
 
-# DATABASE
+# 🔥 DATABASE (POSTGRESQL FINAL)
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'smartcity_db',
+        'USER': 'postgres',
+        'PASSWORD': '12345678',  # ⚠️ ganti sesuai password PostgreSQL kamu
+        'HOST': 'localhost',
+        'PORT': '5432',
     }
 }
 
@@ -99,15 +103,12 @@ USE_TZ = True
 
 
 # STATIC FILES (gambar, css, js)
-
 STATIC_URL = '/static/'
 
-# lokasi folder static
 STATICFILES_DIRS = [
     BASE_DIR / "static",
 ]
 
-# lokasi collect static (opsional untuk production)
 STATIC_ROOT = BASE_DIR / "staticfiles"
 
 

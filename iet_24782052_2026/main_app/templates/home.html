@@ -1,0 +1,66 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Smart City Report</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+
+<body style="background-color:#f4f6f9;">
+
+<div class="container mt-5">
+
+    <!-- Judul -->
+    <h1 class="text-center mb-4"> Smart City Report</h1>
+
+    <!-- Tombol tambah -->
+    <div class="text-center mb-4">
+    <a href="/add/" class="btn btn-primary px-4 py-2">
+        + Tambah Laporan
+    </a>
+    </div>
+
+    <!-- List laporan -->
+    <div class="row justify-content-center">
+        {% for report in reports %}
+        <div class="col-md-6">
+            <div class="card shadow-sm mb-4 text-center">
+                <div class="card-body">
+
+                    <!-- Judul -->
+                    <h5 class="card-title">{{ report.title }}</h5>
+
+                    <!-- Deskripsi -->
+                    <p class="card-text text-muted">{{ report.description }}</p>
+
+                    <!-- Lokasi -->
+                    <p>📍 <b>Lokasi:</b> {{ report.location }}</p>
+
+                    <!-- Status -->
+                    <p>
+                        <b>Status:</b><br>
+                        <span class="badge bg-success px-3 py-2">
+                            {{ report.status }}
+                        </span>
+                    </p>
+
+                    <!-- Tombol -->
+                    <div class="d-flex justify-content-center gap-2 mt-3">
+                        <a href="/detail/{{ report.id }}/" class="btn btn-success btn-sm">👁️ Lihat</a>
+                        <a href="/edit/{{ report.id }}/" class="btn btn-warning btn-sm">✏️ Edit</a>
+                        <a href="/delete/{{ report.id }}/" class="btn btn-danger btn-sm">🗑️ Delete</a>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        {% empty %}
+        <p class="text-center">Tidak ada laporan</p>
+        {% endfor %}
+    </div>
+
+</div>
+
+</body>
+</html>
