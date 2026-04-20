@@ -9,9 +9,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY
 SECRET_KEY = 'django-insecure-23lf=*%$+!ag0*z=u86zy_q-y)iyu)cr48phw+v#x#3e)k0h&e'
-
 DEBUG = True
-
 ALLOWED_HOSTS = []
 
 
@@ -45,11 +43,11 @@ MIDDLEWARE = [
 ROOT_URLCONF = 'iet_24782052_2026.urls'
 
 
-# TEMPLATE (DITAMBAH DIRS)
+# TEMPLATES
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'templates'],  # 🔥 penting
+        'DIRS': [BASE_DIR / 'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -65,13 +63,13 @@ TEMPLATES = [
 WSGI_APPLICATION = 'iet_24782052_2026.wsgi.application'
 
 
-# 🔥 DATABASE (POSTGRESQL)
+# DATABASE
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'smartcity_db',
         'USER': 'postgres',
-        'PASSWORD': '12345678',  # ⚠️ ganti kalau beda
+        'PASSWORD': '12345678',
         'HOST': 'localhost',
         'PORT': '5432',
     }
@@ -106,10 +104,10 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 STATICFILES_DIRS = [
-    BASE_DIR / "static",
+    BASE_DIR / 'static',
 ]
 
-STATIC_ROOT = BASE_DIR / "staticfiles"
+STATIC_ROOT = BASE_DIR / 'staticfiles'
 
 
 # DEFAULT PRIMARY KEY

@@ -1,9 +1,171 @@
-<h1>Edit Laporan</h1>
+{% extends 'base.html' %}
+{% block title %}Edit Laporan{% endblock %}
 
-<form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Update</button>
-</form>
+{% block content %}
 
-<a href="/">Kembali</a>
+<style>
+    .report-form-wrapper {
+        max-width: 950px;
+        margin: 0 auto;
+    }
+
+    .report-form-card {
+        border: none;
+        border-radius: 22px;
+        overflow: hidden;
+        box-shadow: 0 12px 35px rgba(0, 0, 0, 0.08);
+    }
+
+    .report-form-header {
+        background: linear-gradient(135deg, #ffc107, #e0a800);
+        color: #212529;
+        padding: 28px 32px;
+    }
+
+    .report-form-header h2 {
+        margin: 0;
+        font-weight: 700;
+    }
+
+    .report-form-header p {
+        margin: 8px 0 0;
+        opacity: 0.85;
+    }
+
+    .report-form-body {
+        padding: 32px;
+        background: #ffffff;
+    }
+
+    .form-label {
+        font-weight: 600;
+        margin-bottom: 8px;
+    }
+
+    .form-control {
+        border-radius: 14px;
+        padding: 12px 14px;
+        border: 1px solid #dbe3ea;
+    }
+
+    .form-control:focus {
+        border-color: #ffc107;
+        box-shadow: 0 0 0 0.2rem rgba(255, 193, 7, 0.2);
+    }
+
+    textarea.form-control {
+        min-height: 140px;
+    }
+
+    .form-icon-box {
+        width: 56px;
+        height: 56px;
+        border-radius: 16px;
+        background: rgba(0, 0, 0, 0.08);
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.4rem;
+        margin-bottom: 12px;
+    }
+
+    .action-buttons .btn {
+        min-width: 140px;
+        border-radius: 12px;
+        padding: 11px 18px;
+        font-weight: 600;
+    }
+
+    .field-hint {
+        font-size: 0.9rem;
+        color: #6c757d;
+        margin-top: 6px;
+    }
+
+    @media (max-width: 768px) {
+        .report-form-body {
+            padding: 22px;
+        }
+
+        .action-buttons {
+            flex-direction: column-reverse;
+        }
+
+        .action-buttons .btn {
+            width: 100%;
+        }
+    }
+</style>
+
+<!-- Breadcrumb -->
+<nav aria-label="breadcrumb" class="mb-4">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+            <a href="{% url 'landing' %}">Home</a>
+        </li>
+        <li class="breadcrumb-item">
+            <a href="{% url 'report_list' %}">Reports</a>
+        </li>
+        <li class="breadcrumb-item active">
+            Edit
+        </li>
+    </ol>
+</nav>
+
+<div class="report-form-wrapper">
+    <div class="card report-form-card">
+
+        <!-- HEADER -->
+        <div class="report-form-header text-center text-md-start">
+            <div class="form-icon-box mx-auto mx-md-0">
+                <i class="bi bi-pencil-square"></i>
+            </div>
+            <h2>Edit Laporan</h2>
+            <p>Perbarui data laporan sesuai kondisi terbaru.</p>
+        </div>
+
+        <!-- BODY -->
+        <div class="report-form-body">
+            <form method="post" class="loading-form">
+                {% csrf_token %}
+
+                <div class="mb-4">
+                    <label class="form-label">Judul Laporan</label>
+                    {{ form.title }}
+                </div>
+
+                <div class="mb-4">
+                    <label class="form-label">Kategori</label>
+                    {{ form.category }}
+                </div>
+
+                <div class="mb-4">
+                    <label class="form-label">Deskripsi</label>
+                    {{ form.description }}
+                </div>
+
+                <div class="mb-4">
+                    <label class="form-label">Lokasi</label>
+                    {{ form.location }}
+                </div>
+
+                <!-- TOMBOL -->
+                <div class="d-flex justify-content-between gap-3 action-buttons mt-4">
+
+                    <a href="{% url 'report_list' %}" class="btn btn-outline-secondary">
+                        <i class="bi bi-arrow-left me-2"></i>Kembali
+                    </a>
+
+                    <button type="submit" class="btn btn-warning btn-loading">
+                        <i class="bi bi-check-circle me-2"></i>Update
+                    </button>
+
+                </div>
+
+            </form>
+        </div>
+
+    </div>
+</div>
+
+{% endblock %}

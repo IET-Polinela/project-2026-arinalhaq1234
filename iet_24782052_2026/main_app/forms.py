@@ -1,6 +1,7 @@
 from django import forms
 from .models import Report
 
+
 class ReportForm(forms.ModelForm):
     class Meta:
         model = Report
@@ -18,7 +19,7 @@ class ReportForm(forms.ModelForm):
             'description': forms.Textarea(attrs={
                 'class': 'form-control',
                 'placeholder': 'Jelaskan masalah secara detail',
-                'rows': 4
+                'rows': 5
             }),
             'location': forms.TextInput(attrs={
                 'class': 'form-control',

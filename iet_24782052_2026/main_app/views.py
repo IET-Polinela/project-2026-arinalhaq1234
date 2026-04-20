@@ -2,50 +2,85 @@ from django.views.generic import ListView, DetailView, CreateView, UpdateView, D
 from django.views import View
 from django.urls import reverse_lazy
 from django.shortcuts import get_object_or_404, redirect
-from .models import Report
+from django.contrib import messages
 
-# 🔵 READ (List)
+from .models import Report
+from .forms import ReportForm
+
+
+# READ (List)
 class ReportListView(ListView):
     model = Report
     template_name = 'home.html'
     context_object_name = 'reports'
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['is_landing'] = self.kwargs.get('is_landing', False)
+        return context
 
 
-# 👁️ DETAIL
+# DETAIL
 class ReportDetailView(DetailView):
     model = Report
     template_name = 'detail_report.html'
     context_object_name = 'report'
 
 
-# 🟢 CREATE
+# CREATE
 class ReportCreateView(CreateView):
     model = Report
-    fields = ['title', 'category', 'description', 'location']
+    form_class = ReportForm
     template_name = 'add_report.html'
     success_url = reverse_lazy('report_list')
 
+    def form_valid(self, form):
+        response = super().form_valid(form)
+        messages.success(self.request, 'Laporan berhasil ditambahkan.')
+        return response
 
-# 🟡 UPDATE
+
+# UPDATE
 class ReportUpdateView(UpdateView):
     model = Report
-    fields = ['title', 'category', 'description', 'location']
+    form_class = ReportForm
     template_name = 'edit_report.html'
     success_url = reverse_lazy('report_list')
 
+    def form_valid(self, form):
+        response = super().form_valid(form)
+        messages.success(self.request, 'Laporan berhasil diperbarui.')
+        return response
 
-# 🔴 DELETE
+
+# DELETE
 class ReportDeleteView(DeleteView):
     model = Report
-    template_name = 'confirm_delete.html'  # opsional (bisa langsung delete juga)
+    template_name = 'confirm_delete.html'
     success_url = reverse_lazy('report_list')
 
+    def form_valid(self, form):
+        messages.success(self.request, 'Laporan berhasil dihapus.')
+        return super().form_valid(form)
 
-# 🔥 WORKFLOW STATUS (WAJIB LAB 4)
+
+# WORKFLOW STATUS
 class ReportUpdateStatusView(View):
     def post(self, request, pk):
         report = get_object_or_404(Report, pk=pk)
         new_status = request.POST.get('status')
-        report.status = new_status
-        report.save()
+
+        allowed_transitions = {
+            'REPORTED': 'VERIFIED',
+            'VERIFIED': 'IN_PROGRESS',
+            'IN_PROGRESS': 'RESOLVED',
+        }
+
+        if report.status in allowed_transitions and allowed_transitions[report.status] == new_status:
+            report.status = new_status
+            report.save()
+            messages.success(request, f'Status laporan berhasil diubah ke {new_status}.')
+        else:
+            messages.error(request, 'Perubahan status tidak valid.')
+
         return redirect('report_list')

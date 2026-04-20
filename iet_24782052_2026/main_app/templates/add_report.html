@@ -1,110 +1,165 @@
-{% load static %}
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Form Laporan</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+{% extends 'base.html' %}
+{% block title %}Tambah Laporan{% endblock %}
 
-    <style>
-        body {
-            background: linear-gradient(135deg, #3a5bdc, #4a6cf7);
+{% block content %}
+
+<style>
+    .report-form-wrapper {
+        max-width: 950px;
+        margin: 0 auto;
+    }
+
+    .report-form-card {
+        border: none;
+        border-radius: 22px;
+        overflow: hidden;
+        box-shadow: 0 12px 35px rgba(0, 0, 0, 0.08);
+    }
+
+    .report-form-header {
+        background: linear-gradient(135deg, #0d6efd, #0b5ed7);
+        color: white;
+        padding: 28px 32px;
+    }
+
+    .report-form-header h2 {
+        margin: 0;
+        font-weight: 700;
+    }
+
+    .report-form-header p {
+        margin: 8px 0 0;
+        opacity: 0.9;
+    }
+
+    .report-form-body {
+        padding: 32px;
+        background: #ffffff;
+    }
+
+    .form-label {
+        font-weight: 600;
+        margin-bottom: 8px;
+    }
+
+    .form-control {
+        border-radius: 14px;
+        padding: 12px 14px;
+        border: 1px solid #dbe3ea;
+        box-shadow: none;
+    }
+
+    .form-control:focus {
+        border-color: #0d6efd;
+        box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.15);
+    }
+
+    textarea.form-control {
+        min-height: 140px;
+    }
+
+    .form-icon-box {
+        width: 56px;
+        height: 56px;
+        border-radius: 16px;
+        background: rgba(255, 255, 255, 0.18);
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.4rem;
+        margin-bottom: 12px;
+    }
+
+    .action-buttons .btn {
+        min-width: 140px;
+        border-radius: 12px;
+        padding: 11px 18px;
+        font-weight: 600;
+    }
+
+    .field-hint {
+        font-size: 0.9rem;
+        color: #6c757d;
+        margin-top: 6px;
+    }
+
+    @media (max-width: 768px) {
+        .report-form-body {
+            padding: 22px;
         }
 
-        .form-container {
-            background: white;
-            border-radius: 12px;
-            padding: 30px;
-            margin-top: 50px;
+        .action-buttons {
+            flex-direction: column-reverse;
         }
 
-        .navbar-custom {
-            background-color: transparent;
+        .action-buttons .btn {
+            width: 100%;
         }
+    }
+</style>
 
-        .navbar-brand {
-            font-weight: bold;
-            color: white !important;
-        }
-
-        .nav-link {
-            color: white !important;
-        }
-
-        h2 {
-            color: white;
-            font-weight: bold;
-        }
-
-        .btn-primary {
-            background-color: #3a5bdc;
-            border: none;
-        }
-    </style>
-</head>
-
-<body>
-
-<!-- 🔷 NAVBAR -->
-<nav class="navbar navbar-expand-lg navbar-custom px-4">
-    <a class="navbar-brand" href="#">📢 Punggur Smart City</a>
-
-    <div class="collapse navbar-collapse">
-        <ul class="navbar-nav ms-auto">
-            <li class="nav-item">
-                <a class="nav-link" href="/">Dashboard</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="/">Laporan</a>
-            </li>
-        </ul>
-    </div>
+<nav aria-label="breadcrumb" class="mb-4">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+            <a href="{% url 'landing' %}">Home</a>
+        </li>
+        <li class="breadcrumb-item">
+            <a href="{% url 'report_list' %}">Reports</a>
+        </li>
+        <li class="breadcrumb-item active">Tambah</li>
+    </ol>
 </nav>
 
-<!-- 🔷 TITLE -->
-<div class="container text-center">
-    <h2 class="mt-4">FORM LAPORAN PENGADUAN</h2>
-</div>
-
-<!-- 🔷 FORM -->
-<div class="container">
-    <div class="form-container shadow">
-
-        <form method="post">
-            {% csrf_token %}
-
-            <!-- Judul -->
-            <div class="mb-3">
-                <label class="form-label">Judul Laporan</label>
-                {{ form.title }}
+<div class="report-form-wrapper">
+    <div class="card report-form-card">
+        <div class="report-form-header text-center text-md-start">
+            <div class="form-icon-box mx-auto mx-md-0">
+                <i class="bi bi-file-earmark-plus-fill"></i>
             </div>
+            <h2>Form Laporan Pengaduan</h2>
+            <p>Isi data laporan dengan lengkap agar proses penanganan lebih mudah dan cepat.</p>
+        </div>
 
-            <!-- Kategori -->
-            <div class="mb-3">
-                <label class="form-label">Kategori</label>
-                {{ form.category }}
-            </div>
+        <div class="report-form-body">
+            <form method="post" class="loading-form">
+                {% csrf_token %}
 
-            <!-- Deskripsi -->
-            <div class="mb-3">
-                <label class="form-label">Deskripsi</label>
-                {{ form.description }}
-            </div>
+                <div class="mb-4">
+                    <label class="form-label">Judul Laporan</label>
+                    {{ form.title }}
+                    <div class="field-hint">Tuliskan judul singkat dan jelas.</div>
+                </div>
 
-            <!-- Lokasi -->
-            <div class="mb-3">
-                <label class="form-label">Lokasi</label>
-                {{ form.location }}
-            </div>
+                <div class="mb-4">
+                    <label class="form-label">Kategori</label>
+                    {{ form.category }}
+                    <div class="field-hint">Contoh: jalan rusak, sampah, lampu mati.</div>
+                </div>
 
-            <!-- Tombol -->
-            <button type="submit" class="btn btn-primary w-100">
-                Buat Laporan
-            </button>
+                <div class="mb-4">
+                    <label class="form-label">Deskripsi</label>
+                    {{ form.description }}
+                    <div class="field-hint">Jelaskan kondisi masalah secara detail.</div>
+                </div>
 
-        </form>
+                <div class="mb-4">
+                    <label class="form-label">Lokasi</label>
+                    {{ form.location }}
+                    <div class="field-hint">Masukkan lokasi kejadian secara spesifik.</div>
+                </div>
 
+                <div class="d-flex justify-content-between gap-3 action-buttons mt-4">
+                    <a href="{% url 'report_list' %}" class="btn btn-outline-secondary">
+                        <i class="bi bi-arrow-left me-2"></i>Kembali
+                    </a>
+
+                    <button type="submit" class="btn btn-primary btn-loading">
+                        <i class="bi bi-send-fill me-2"></i>Submit
+                    </button>
+                </div>
+            </form>
+        </div>
     </div>
 </div>
 
-</body>
-</html>
+{% endblock %}
