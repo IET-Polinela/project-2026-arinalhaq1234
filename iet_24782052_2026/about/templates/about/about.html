@@ -1,164 +1,54 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-<meta charset="UTF-8">
-<title>Profil Saya</title>
+{% extends 'base.html' %}
+{% block title %}About{% endblock %}
 
-<style>
+{% block content %}
+<div class="container py-4">
+    <div class="text-center mb-5 p-5 rounded-4 shadow-sm text-white"
+         style="
+            background-image: linear-gradient(rgba(15, 23, 42, 0.65), rgba(15, 23, 42, 0.65)),
+            url('https://polinela.ac.id/wp-content/uploads/2025/02/gedung_fasilitas_smart_food_security_politeknik_negeri_lampung.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+         ">
+        <h1 class="display-4 fw-bold mb-3">M ARINAL HAQ</h1>
+        <p class="fs-5 mb-0">Mahasiswa Teknologi Rekayasa Internet</p>
+    </div>
 
-body{
-    font-family: Arial, sans-serif;
-    margin:0;
-    padding:0;
+    <div class="card border-0 shadow-sm rounded-4">
+        <div class="card-body p-4 p-md-5">
+            <h2 class="mb-4 fw-bold">Profil Saya</h2>
 
-    background-image:url("https://polinela.ac.id/wp-content/uploads/2025/02/gedung_fasilitas_smart_food_security_politeknik_negeri_lampung.jpg");
-    background-size:cover;
-    background-position:center;
-    background-repeat:no-repeat;
-}
+            <div class="mb-3">
+                <p class="mb-2"><strong>Nama:</strong> M Arinal Haq</p>
+                <p class="mb-2"><strong>Umur:</strong> 19 Tahun</p>
+                <p class="mb-3">
+                    <strong>Alamat:</strong> Sidorahayu, Sidomulyo, Kecamatan Punggur,
+                    Kabupaten Lampung Tengah, Provinsi Lampung
+                </p>
 
-/* navbar */
+                <a class="btn btn-primary rounded-3 px-4"
+                   href="https://maps.app.goo.gl/L6yTbmie28UKFzbY9"
+                   target="_blank">
+                    Lihat Lokasi
+                </a>
+            </div>
 
-.navbar{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    padding:20px 60px;
-    background:white;
-}
+            <hr class="my-4">
 
-.logo{
-    font-size:24px;
-    font-weight:bold;
-}
+            <div>
+                <h4 class="fw-bold mb-3">Riwayat Pendidikan</h4>
+                <ul class="mb-0">
+                    <li>SD / MI : MI Ma'arif 01 Punggur</li>
+                    <li>MTS / SMP : MTS Ma'arif 01 Punggur</li>
+                    <li>SMA / MA : MA Ma'arif 01 Punggur</li>
+                </ul>
+            </div>
+        </div>
+    </div>
 
-.navbar a{
-    text-decoration:none;
-    color:black;
-    margin-left:20px;
-    font-weight:bold;
-}
-
-/* hero section */
-
-.hero{
-    text-align:center;
-    padding:120px 40px;
-}
-
-.hero h1{
-    font-size:70px;
-    font-weight:bold;
-    color:#0f172a;
-}
-
-.hero p{
-    font-size:20px;
-    margin-top:20px;
-    color:#333;
-}
-
-/* profile card */
-
-.card{
-    width:70%;
-    margin:auto;
-    background:white;
-    padding:40px;
-    border-radius:12px;
-    box-shadow:0 10px 25px rgba(0,0,0,0.2);
-    margin-top:40px;
-}
-
-.card p{
-    font-size:18px;
-}
-
-/* school */
-
-.school{
-    margin-top:20px;
-}
-
-/* button */
-
-.btn{
-    display:inline-block;
-    margin-top:20px;
-    padding:12px 25px;
-    background:#2563eb;
-    color:white;
-    text-decoration:none;
-    border-radius:8px;
-}
-
-.btn:hover{
-    background:#1d4ed8;
-}
-
-/* footer */
-
-.footer{
-    background:#3b82f6;
-    color:white;
-    text-align:center;
-    padding:18px;
-    margin-top:80px;
-    font-size:18px;
-}
-
-</style>
-</head>
-
-<body>
-
-<div class="navbar">
-<div class="logo">Profil Saya</div>
-
-<div>
-<a href="/">Dashboard</a>
-<a href="/contacts/">Sosial Media</a>
+    <div class="text-center mt-4 text-muted">
+        © 2026 | Website M Arinal Haq
+    </div>
 </div>
-</div>
-
-
-<div class="hero">
-
-<h1>M ARINAL HAQ</h1>
-
-<p>Mahasiswa Teknologi Rekayasa Internet</p>
-
-</div>
-
-
-<div class="card">
-
-<p><b>Nama :</b> M Arinal Haq</p>
-<p><b>Umur :</b> 19 Tahun</p>
-<p><b>Alamat :</b> Sidorahayu, Sidomulyo, Kecamatan Punggur, Kabupaten Lampung Tengah, Provinsi Lampung</p>
-
-<a class="btn" href="https://maps.app.goo.gl/L6yTbmie28UKFzbY9" target="_blank">
-Lihat Lokasi
-</a>
-
-<div class="school">
-
-<h3>Riwayat Pendidikan</h3>
-
-<ul>
-<li>SD / MI : MI Ma'arif 01 Punggur</li>
-<li>MTS / SMP : MTS Ma'arif 01 Punggur</li>
-<li>SMA / MA : MA Ma'arif 01 Punggur</li>
-</ul>
-
-</div>
-
-</div>
-
-
-<div class="footer">
-© 2026 | Website M Arinal Haq
-</div>
-
-</body>
-</html>
+{% endblock %}

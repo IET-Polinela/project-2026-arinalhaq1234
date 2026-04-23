@@ -8,12 +8,25 @@ from .models import Report
 from .forms import ReportForm
 
 
+class AdminRequiredMixin:
+    def dispatch(self, request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            messages.error(request, 'Silakan login terlebih dahulu.')
+            return redirect('login')
+
+        if not request.user.is_admin:
+            messages.error(request, 'Akses Ditolak. Hanya admin yang dapat mengakses fitur ini.')
+            return redirect('report_list')
+
+        return super().dispatch(request, *args, **kwargs)
+
+
 # READ (List)
 class ReportListView(ListView):
     model = Report
     template_name = 'home.html'
     context_object_name = 'reports'
-    
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['is_landing'] = self.kwargs.get('is_landing', False)
@@ -28,7 +41,7 @@ class ReportDetailView(DetailView):
 
 
 # CREATE
-class ReportCreateView(CreateView):
+class ReportCreateView(AdminRequiredMixin, CreateView):
     model = Report
     form_class = ReportForm
     template_name = 'add_report.html'
@@ -41,7 +54,7 @@ class ReportCreateView(CreateView):
 
 
 # UPDATE
-class ReportUpdateView(UpdateView):
+class ReportUpdateView(AdminRequiredMixin, UpdateView):
     model = Report
     form_class = ReportForm
     template_name = 'edit_report.html'
@@ -54,7 +67,7 @@ class ReportUpdateView(UpdateView):
 
 
 # DELETE
-class ReportDeleteView(DeleteView):
+class ReportDeleteView(AdminRequiredMixin, DeleteView):
     model = Report
     template_name = 'confirm_delete.html'
     success_url = reverse_lazy('report_list')
@@ -65,7 +78,7 @@ class ReportDeleteView(DeleteView):
 
 
 # WORKFLOW STATUS
-class ReportUpdateStatusView(View):
+class ReportUpdateStatusView(AdminRequiredMixin, View):
     def post(self, request, pk):
         report = get_object_or_404(Report, pk=pk)
         new_status = request.POST.get('status')

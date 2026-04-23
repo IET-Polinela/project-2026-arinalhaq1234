@@ -25,6 +25,7 @@ INSTALLED_APPS = [
     'main_app',
     'about',
     'contacts',
+    'usermanagement_24782052',
 ]
 
 
@@ -75,6 +76,7 @@ DATABASES = {
     }
 }
 
+AUTH_USER_MODEL = 'usermanagement_24782052.CustomUser'
 
 # PASSWORD VALIDATION
 AUTH_PASSWORD_VALIDATORS = [

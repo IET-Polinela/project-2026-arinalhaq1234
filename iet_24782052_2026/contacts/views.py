@@ -1,4 +1,4 @@
 from django.shortcuts import render
 
-def contact_page(request):
+def contact_view(request):
     return render(request, 'contacts/contacts.html')

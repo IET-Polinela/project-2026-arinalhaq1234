@@ -1,5 +1,12 @@
 from django.urls import path
-from .views import *
+from .views import (
+    ReportListView,
+    ReportDetailView,
+    ReportCreateView,
+    ReportUpdateView,
+    ReportDeleteView,
+    ReportUpdateStatusView,
+)
 
 urlpatterns = [
     path('', ReportListView.as_view(), {'is_landing': True}, name='landing'),

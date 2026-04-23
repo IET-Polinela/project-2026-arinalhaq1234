@@ -7,15 +7,11 @@ from pathlib import Path
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
-# SECURITY
 SECRET_KEY = 'django-insecure-23lf=*%$+!ag0*z=u86zy_q-y)iyu)cr48phw+v#x#3e)k0h&e'
-
 DEBUG = True
-
 ALLOWED_HOSTS = []
 
 
-# INSTALLED APPS
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -27,10 +23,10 @@ INSTALLED_APPS = [
     'main_app',
     'about',
     'contacts',
+    'usermanagement_24782052',
 ]
 
 
-# MIDDLEWARE
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -45,11 +41,10 @@ MIDDLEWARE = [
 ROOT_URLCONF = 'iet_24782052_2026.urls'
 
 
-# TEMPLATE
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'templates'],  # 🔥 tambahan biar fleksibel
+        'DIRS': [BASE_DIR / 'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -65,20 +60,21 @@ TEMPLATES = [
 WSGI_APPLICATION = 'iet_24782052_2026.wsgi.application'
 
 
-# 🔥 DATABASE (POSTGRESQL FINAL)
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'smartcity_db',
         'USER': 'postgres',
-        'PASSWORD': '12345678',  # ⚠️ ganti sesuai password PostgreSQL kamu
+        'PASSWORD': '12345678',
         'HOST': 'localhost',
         'PORT': '5432',
     }
 }
 
 
-# PASSWORD VALIDATION
+AUTH_USER_MODEL = 'usermanagement_24782052.CustomUser'
+
+
 AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
@@ -95,22 +91,19 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 
-# INTERNATIONAL
 LANGUAGE_CODE = 'en-us'
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Jakarta'
 USE_I18N = True
 USE_TZ = True
 
 
-# STATIC FILES (gambar, css, js)
 STATIC_URL = '/static/'
 
 STATICFILES_DIRS = [
-    BASE_DIR / "static",
+    BASE_DIR / 'static',
 ]
 
-STATIC_ROOT = BASE_DIR / "staticfiles"
+STATIC_ROOT = BASE_DIR / 'staticfiles'
 
 
-# DEFAULT PRIMARY KEY
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'

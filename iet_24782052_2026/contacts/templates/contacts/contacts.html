@@ -1,177 +1,142 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-<meta charset="UTF-8">
-<title>Sosial Media Saya</title>
+{% extends 'base.html' %}
+{% block title %}Contact{% endblock %}
 
+{% block content %}
 <style>
+    .contact-hero {
+        background-image:
+            linear-gradient(rgba(15, 23, 42, 0.65), rgba(15, 23, 42, 0.65)),
+            url("https://polinela.ac.id/wp-content/uploads/2025/02/gedung_fasilitas_smart_food_security_politeknik_negeri_lampung.jpg");
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        border-radius: 20px;
+        padding: 70px 30px;
+        text-align: center;
+        color: white;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+        margin-bottom: 35px;
+    }
 
-body{
-    font-family: Arial, sans-serif;
-    margin:0;
-    padding:0;
+    .contact-box {
+        width: 100%;
+        max-width: 900px;
+        margin: 0 auto;
+        background: white;
+        border-radius: 18px;
+        padding: 40px 30px;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.12);
+    }
 
-    background-image:url("https://polinela.ac.id/wp-content/uploads/2025/02/gedung_fasilitas_smart_food_security_politeknik_negeri_lampung.jpg");
-    background-size:cover;
-    background-position:center;
-    background-repeat:no-repeat;
-}
+    .contact-title {
+        color: #1E3A8A;
+        font-weight: 700;
+        margin-bottom: 35px;
+        text-align: center;
+    }
 
-/* NAVBAR */
+    .social-card {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        background: #e9ecef;
+        padding: 22px 24px;
+        margin: 18px 0;
+        border-radius: 14px;
+        text-decoration: none;
+        color: #111827;
+        transition: 0.3s;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    }
 
-.navbar{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    padding:20px 60px;
-    background:white;
-}
+    .social-card:hover {
+        transform: scale(1.02);
+        color: #111827;
+        background: #dde4ea;
+    }
 
-.logo{
-    font-size:24px;
-    font-weight:bold;
-}
+    .social-left {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+    }
 
-.navbar a{
-    text-decoration:none;
-    color:black;
-    margin-left:25px;
-    font-weight:bold;
-    transition:0.3s;
-}
+    .social-left img {
+        width: 45px;
+        height: 45px;
+        object-fit: contain;
+    }
 
-.navbar a:hover{
-    color:#2563eb;
-}
+    .social-left h4 {
+        margin: 0;
+        font-weight: 700;
+    }
 
-/* CONTAINER */
+    .email-text {
+        margin: 0;
+        font-weight: 600;
+    }
 
-.container{
-    width:80%;
-    max-width:900px;
-    margin:70px auto;
-    background:white;
-    border-radius:15px;
-    padding:40px;
-    box-shadow:0 10px 25px rgba(0,0,0,0.2);
-    text-align:center;
-}
+    .contact-footer {
+        text-align: center;
+        margin-top: 30px;
+        color: #6b7280;
+        font-size: 15px;
+    }
 
-h1{
-    color:#1E3A8A;
-    margin-bottom:40px;
-}
+    @media (max-width: 768px) {
+        .contact-hero {
+            padding: 50px 20px;
+        }
 
-/* CARD */
+        .contact-box {
+            padding: 28px 18px;
+        }
 
-.card{
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    background:#cfd8dc;
-    padding:25px;
-    margin:20px 0;
-    border-radius:12px;
-    text-decoration:none;
-    color:black;
-    transition:0.3s;
-}
-
-.card:hover{
-    transform:scale(1.03);
-}
-
-.social{
-    display:flex;
-    align-items:center;
-}
-
-.social img{
-    width:45px;
-    margin-right:15px;
-}
-
-/* EMAIL */
-
-.email{
-    font-weight:bold;
-}
-
-/* FOOTER */
-
-.footer{
-    margin-top:80px;
-    background: linear-gradient(90deg,#4facfe,#2563eb);
-    color:white;
-    text-align:center;
-    padding:18px;
-    font-size:18px;
-}
-
+        .social-card {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 12px;
+        }
+    }
 </style>
-</head>
 
-<body>
+<div class="container py-4">
+    <div class="contact-hero">
+        <h1 class="display-5 fw-bold mb-3">Sosial Media Saya</h1>
+        <p class="mb-0 fs-5">Temukan dan hubungi saya melalui platform berikut.</p>
+    </div>
 
-<div class="navbar">
+    <div class="contact-box">
+        <h2 class="contact-title">Sosial Media</h2>
 
-<div class="logo">Sosial Media</div>
+        <a href="https://www.instagram.com/m_arinalhaa" target="_blank" class="social-card">
+            <div class="social-left">
+                <img src="https://cdn-icons-png.flaticon.com/512/2111/2111463.png" alt="Instagram">
+                <h4>Instagram</h4>
+            </div>
+            <span>@m_arinalhaa</span>
+        </a>
 
-<div>
-<a href="/">Dashboard</a>
-<a href="/about/">Profil</a>
+        <a href="https://www.tiktok.com/@nyamarjunior10" target="_blank" class="social-card">
+            <div class="social-left">
+                <img src="https://cdn-icons-png.flaticon.com/512/3046/3046121.png" alt="TikTok">
+                <h4>TikTok</h4>
+            </div>
+            <span>@nyamarjunior10</span>
+        </a>
+
+        <div class="social-card">
+            <div class="social-left">
+                <img src="https://cdn-icons-png.flaticon.com/512/281/281769.png" alt="Email">
+                <h4>Email</h4>
+            </div>
+            <p class="email-text">arilhaq700@gmail.com</p>
+        </div>
+
+        <div class="contact-footer">
+            © 2026 | Website M Arinal Haq
+        </div>
+    </div>
 </div>
-
-</div>
-
-
-<div class="container">
-
-<h1>Sosial media</h1>
-
-<!-- Instagram -->
-
-<a href="https://www.instagram.com/m_arinalhaa" target="_blank" class="card">
-
-<div class="social">
-<img src="https://cdn-icons-png.flaticon.com/512/2111/2111463.png">
-<h3>Instagram</h3>
-</div>
-
-</a>
-
-
-<!-- TikTok -->
-
-<a href="https://www.tiktok.com/@nyamarjunior10" target="_blank" class="card">
-
-<div class="social">
-<img src="https://cdn-icons-png.flaticon.com/512/3046/3046121.png">
-<h3>TikTok</h3>
-</div>
-
-</a>
-
-
-<!-- Email -->
-
-<div class="card">
-
-<div class="social">
-<img src="https://cdn-icons-png.flaticon.com/512/281/281769.png">
-<h3>Email</h3>
-</div>
-
-<p class="email">arilhaq700@gmail.com</p>
-
-</div>
-
-</div>
-
-
-<div class="footer">
-© 2026 | Website M Arinal Haq
-</div>
-
-</body>
-</html>
+{% endblock %}

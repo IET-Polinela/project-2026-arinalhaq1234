@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+{% block title %}Login{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6 col-lg-5">
+        <div class="card shadow-sm border-0 rounded-4">
+            <div class="card-body p-4">
+                <h2 class="text-center mb-4">Login</h2>
+
+                <form method="post" class="loading-form">
+                    {% csrf_token %}
+
+                    <div class="mb-3">
+                        <label class="form-label">Username</label>
+                        <input type="text" name="username" class="form-control" placeholder="Masukkan username">
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Password</label>
+                        <div class="input-group">
+                            <input type="password" name="password" id="loginPassword" class="form-control" placeholder="Masukkan password">
+                            <button type="button" class="btn btn-outline-secondary" onclick="togglePassword('loginPassword', 'loginIcon')">
+                                <i class="bi bi-eye" id="loginIcon"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary w-100 btn-loading">
+                        Login
+                    </button>
+                </form>
+
+                <p class="text-center mt-3 mb-0">
+                    Belum punya akun? <a href="{% url 'register' %}">Daftar</a>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function togglePassword(inputId, iconId) {
+    const passwordField = document.getElementById(inputId);
+    const toggleIcon = document.getElementById(iconId);
+
+    if (passwordField.type === "password") {
+        passwordField.type = "text";
+        toggleIcon.classList.remove("bi-eye");
+        toggleIcon.classList.add("bi-eye-slash");
+    } else {
+        passwordField.type = "password";
+        toggleIcon.classList.remove("bi-eye-slash");
+        toggleIcon.classList.add("bi-eye");
+    }
+}
+</script>
+{% endblock %}
