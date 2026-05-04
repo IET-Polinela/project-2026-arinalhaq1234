@@ -1,3 +1,5 @@
+from django.http import JsonResponse
+from django.db.models import Q
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.views import View
 from django.urls import reverse_lazy
@@ -26,6 +28,7 @@ class ReportListView(ListView):
     model = Report
     template_name = 'home.html'
     context_object_name = 'reports'
+    ordering = ['-id']
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -33,11 +36,58 @@ class ReportListView(ListView):
         return context
 
 
-# DETAIL
+# DETAIL PAGE
 class ReportDetailView(DetailView):
     model = Report
     template_name = 'detail_report.html'
     context_object_name = 'report'
+
+
+# DETAIL JSON FOR MODAL
+class ReportDetailJsonView(View):
+    def get(self, request, pk, *args, **kwargs):
+        report = get_object_or_404(Report, pk=pk)
+
+        data = {
+            'id': report.id,
+            'title': report.title,
+            'category': report.category,
+            'description': report.description,
+            'location': report.location,
+            'status': report.status,
+        }
+
+        return JsonResponse(data)
+
+
+# LIVE SEARCH JSON
+class ReportSearchJsonView(View):
+    def get(self, request, *args, **kwargs):
+        query = request.GET.get('q', '').strip()
+
+        reports = Report.objects.all().order_by('-id')
+
+        if query:
+            reports = reports.filter(
+                Q(title__icontains=query) |
+                Q(category__icontains=query) |
+                Q(location__icontains=query) |
+                Q(status__icontains=query)
+            )
+
+        data = [
+            {
+                'id': report.id,
+                'title': report.title,
+                'category': report.category,
+                'location': report.location,
+                'status': report.status,
+                'can_manage': request.user.is_authenticated and getattr(request.user, 'is_admin', False),
+            }
+            for report in reports[:50]
+        ]
+
+        return JsonResponse({'results': data})
 
 
 # CREATE

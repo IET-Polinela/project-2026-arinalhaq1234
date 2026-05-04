@@ -1,0 +1,573 @@
+{% extends 'base.html' %}
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+<style>
+    .dashboard-wrapper {
+        padding-top: 6px;
+    }
+
+    .dashboard-header {
+        margin-bottom: 20px;
+    }
+
+    .dashboard-title {
+        font-weight: 800;
+        font-size: 1.7rem;
+        margin-bottom: 4px;
+        color: #0f172a;
+    }
+
+    .dashboard-subtitle {
+        color: #6b7280;
+        margin-bottom: 0;
+        font-size: 0.95rem;
+    }
+
+    .stats-card,
+    .chart-card,
+    .list-card {
+        border: none;
+        border-radius: 20px;
+        background: rgba(255, 255, 255, 0.88);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        box-shadow: 0 10px 24px rgba(15, 23, 42, 0.08);
+        overflow: hidden;
+    }
+
+    .stats-card .card-body,
+    .chart-card .card-body,
+    .list-card .card-body {
+        padding: 18px;
+    }
+
+    .stats-card {
+        position: relative;
+    }
+
+    .stats-card::before {
+        content: "";
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 4px;
+        height: 100%;
+        border-radius: 20px;
+    }
+
+    .stats-card.blue::before {
+        background: linear-gradient(180deg, #3b82f6, #2563eb);
+    }
+
+    .stats-card.green::before {
+        background: linear-gradient(180deg, #22c55e, #16a34a);
+    }
+
+    .stats-card.purple::before {
+        background: linear-gradient(180deg, #8b5cf6, #7c3aed);
+    }
+
+    .stats-flex {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 14px;
+    }
+
+    .stats-left {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+    }
+
+    .stats-icon {
+        width: 58px;
+        height: 58px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.55rem;
+        flex-shrink: 0;
+    }
+
+    .stats-card.blue .stats-icon {
+        background: rgba(59, 130, 246, 0.12);
+        color: #2563eb;
+    }
+
+    .stats-card.green .stats-icon {
+        background: rgba(34, 197, 94, 0.12);
+        color: #16a34a;
+    }
+
+    .stats-card.purple .stats-icon {
+        background: rgba(139, 92, 246, 0.12);
+        color: #7c3aed;
+    }
+
+    .stats-label {
+        color: #6b7280;
+        font-weight: 600;
+        font-size: 0.92rem;
+        margin-bottom: 4px;
+    }
+
+    .stats-value {
+        font-size: 2.2rem;
+        font-weight: 800;
+        line-height: 1;
+        color: #0f172a;
+        margin: 0;
+    }
+
+    .stats-mini {
+        min-width: 74px;
+        height: 46px;
+        border-radius: 14px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.4rem;
+    }
+
+    .stats-card.blue .stats-mini {
+        background: rgba(59, 130, 246, 0.08);
+        color: #2563eb;
+    }
+
+    .stats-card.green .stats-mini {
+        background: rgba(34, 197, 94, 0.08);
+        color: #16a34a;
+    }
+
+    .stats-card.purple .stats-mini {
+        background: rgba(139, 92, 246, 0.08);
+        color: #7c3aed;
+    }
+
+    .panel-title {
+        font-weight: 800;
+        font-size: 1.08rem;
+        margin-bottom: 0;
+        color: #0f172a;
+    }
+
+    .panel-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 14px;
+    }
+
+    .panel-left {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+
+    .panel-icon {
+        width: 44px;
+        height: 44px;
+        border-radius: 14px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.35rem;
+        flex-shrink: 0;
+    }
+
+    .panel-icon.blue {
+        background: rgba(59, 130, 246, 0.12);
+        color: #2563eb;
+    }
+
+    .panel-icon.yellow {
+        background: rgba(250, 204, 21, 0.18);
+        color: #f59e0b;
+    }
+
+    .chart-box {
+        position: relative;
+        height: 320px;
+    }
+
+    .report-item {
+        border-bottom: 1px solid #edf2f7;
+        padding: 12px 0;
+    }
+
+    .report-item:last-child {
+        border-bottom: none;
+        padding-bottom: 0;
+    }
+
+    .report-item:first-child {
+        padding-top: 0;
+    }
+
+    .report-title-text {
+        font-weight: 700;
+        margin-bottom: 4px;
+        color: #111827;
+        font-size: 0.98rem;
+    }
+
+    .report-meta {
+        font-size: 0.88rem;
+        color: #6b7280;
+        margin-bottom: 2px;
+    }
+
+    .status-pill {
+        display: inline-block;
+        padding: 6px 12px;
+        border-radius: 999px;
+        font-size: 0.74rem;
+        font-weight: 700;
+        white-space: nowrap;
+    }
+
+    .status-reported {
+        background: #ffe9a8;
+        color: #7a5d00;
+    }
+
+    .status-resolved {
+        background: #d1fae5;
+        color: #047857;
+    }
+
+    .empty-text {
+        color: #6b7280;
+        margin-bottom: 0;
+    }
+
+    @media (max-width: 991px) {
+        .chart-box {
+            height: 280px;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .stats-flex {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .stats-value {
+            font-size: 1.9rem;
+        }
+
+        .chart-box {
+            height: 250px;
+        }
+    }
+</style>
+
+<div class="dashboard-wrapper">
+    <div class="dashboard-header">
+        <h1 class="dashboard-title">Dashboard Statistik Laporan</h1>
+        <p class="dashboard-subtitle">Ringkasan laporan masyarakat secara realtime.</p>
+    </div>
+
+    <div class="row g-3 mb-4">
+        <div class="col-md-4">
+            <div class="card stats-card blue">
+                <div class="card-body">
+                    <div class="stats-flex">
+                        <div class="stats-left">
+                            <div class="stats-icon">
+                                <i class="bi bi-clipboard-data"></i>
+                            </div>
+                            <div>
+                                <div class="stats-label">Total Laporan</div>
+                                <h2 class="stats-value" id="totalReports">0</h2>
+                            </div>
+                        </div>
+                        <div class="stats-mini">
+                            <i class="bi bi-graph-up-arrow"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card stats-card green">
+                <div class="card-body">
+                    <div class="stats-flex">
+                        <div class="stats-left">
+                            <div class="stats-icon">
+                                <i class="bi bi-pie-chart"></i>
+                            </div>
+                            <div>
+                                <div class="stats-label">Status Reported</div>
+                                <h2 class="stats-value" id="totalReported">0</h2>
+                            </div>
+                        </div>
+                        <div class="stats-mini">
+                            <i class="bi bi-activity"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card stats-card purple">
+                <div class="card-body">
+                    <div class="stats-flex">
+                        <div class="stats-left">
+                            <div class="stats-icon">
+                                <i class="bi bi-check-circle"></i>
+                            </div>
+                            <div>
+                                <div class="stats-label">Status Resolved</div>
+                                <h2 class="stats-value" id="totalResolved">0</h2>
+                            </div>
+                        </div>
+                        <div class="stats-mini">
+                            <i class="bi bi-bar-chart-line"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-3 mb-4">
+        <div class="col-lg-6">
+            <div class="card chart-card h-100">
+                <div class="card-body">
+                    <div class="panel-header">
+                        <div class="panel-left">
+                            <div class="panel-icon blue">
+                                <i class="bi bi-pie-chart"></i>
+                            </div>
+                            <h5 class="panel-title">Status Laporan</h5>
+                        </div>
+                        <i class="bi bi-three-dots-vertical text-muted"></i>
+                    </div>
+                    <div class="chart-box">
+                        <canvas id="statusChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-6">
+            <div class="card chart-card h-100">
+                <div class="card-body">
+                    <div class="panel-header">
+                        <div class="panel-left">
+                            <div class="panel-icon yellow">
+                                <i class="bi bi-folder"></i>
+                            </div>
+                            <h5 class="panel-title">Kategori Laporan</h5>
+                        </div>
+                        <i class="bi bi-three-dots-vertical text-muted"></i>
+                    </div>
+                    <div class="chart-box">
+                        <canvas id="categoryChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-3">
+        <div class="col-lg-6">
+            <div class="card list-card h-100">
+                <div class="card-body">
+                    <h5 class="panel-title mb-3">🆕 Laporan Terbaru</h5>
+                    <div id="reportedList"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-6">
+            <div class="card list-card h-100">
+                <div class="card-body">
+                    <h5 class="panel-title mb-3">✅ Laporan Selesai</h5>
+                    <div id="resolvedList"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    fetch('/dashboard/stats/')
+        .then(response => response.json())
+        .then(data => {
+            console.log(data);
+
+            document.getElementById('totalReports').textContent = data.summary.total_reports;
+            document.getElementById('totalReported').textContent = data.summary.total_reported;
+            document.getElementById('totalResolved').textContent = data.summary.total_resolved;
+
+            const statusLabels = data.status_counts.map(item => item.status);
+            const statusTotals = data.status_counts.map(item => item.total);
+
+            const categoryLabels = data.category_counts.map(item => item.category);
+            const categoryTotals = data.category_counts.map(item => item.total);
+
+            const statusCtx = document.getElementById('statusChart').getContext('2d');
+            const statusGradient1 = statusCtx.createLinearGradient(0, 0, 0, 320);
+            statusGradient1.addColorStop(0, '#60a5fa');
+            statusGradient1.addColorStop(1, '#2563eb');
+
+            const statusGradient2 = statusCtx.createLinearGradient(0, 0, 0, 320);
+            statusGradient2.addColorStop(0, '#fb7185');
+            statusGradient2.addColorStop(1, '#f43f5e');
+
+            const statusGradient3 = statusCtx.createLinearGradient(0, 0, 0, 320);
+            statusGradient3.addColorStop(0, '#fdba74');
+            statusGradient3.addColorStop(1, '#fb923c');
+
+            const statusGradient4 = statusCtx.createLinearGradient(0, 0, 0, 320);
+            statusGradient4.addColorStop(0, '#fde047');
+            statusGradient4.addColorStop(1, '#facc15');
+
+            new Chart(statusCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: statusLabels,
+                    datasets: [{
+                        data: statusTotals,
+                        backgroundColor: [
+                            statusGradient1,
+                            statusGradient2,
+                            statusGradient3,
+                            statusGradient4
+                        ],
+                        borderColor: '#ffffff',
+                        borderWidth: 3,
+                        hoverOffset: 10
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    cutout: '50%',
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                            labels: {
+                                boxWidth: 18,
+                                font: {
+                                    size: 12,
+                                    weight: '600'
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+
+            const categoryCtx = document.getElementById('categoryChart').getContext('2d');
+            const barGradient = categoryCtx.createLinearGradient(0, 0, 0, 320);
+            barGradient.addColorStop(0, '#93c5fd');
+            barGradient.addColorStop(1, '#3b82f6');
+
+            new Chart(categoryCtx, {
+                type: 'bar',
+                data: {
+                    labels: categoryLabels,
+                    datasets: [{
+                        label: 'Jumlah Laporan',
+                        data: categoryTotals,
+                        backgroundColor: barGradient,
+                        borderColor: '#60a5fa',
+                        borderWidth: 1.2,
+                        borderRadius: 8,
+                        borderSkipped: false
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            labels: {
+                                font: {
+                                    size: 12,
+                                    weight: '600'
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            grid: {
+                                color: 'rgba(148, 163, 184, 0.18)'
+                            },
+                            ticks: {
+                                font: {
+                                    size: 11
+                                }
+                            }
+                        },
+                        x: {
+                            grid: {
+                                display: false
+                            },
+                            ticks: {
+                                font: {
+                                    size: 11
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+
+            const reportedList = document.getElementById('reportedList');
+            reportedList.innerHTML = '';
+
+            if (data.latest_reported.length === 0) {
+                reportedList.innerHTML = '<p class="empty-text">Belum ada laporan terbaru.</p>';
+            } else {
+                data.latest_reported.forEach(item => {
+                    reportedList.innerHTML += `
+                        <div class="report-item d-flex justify-content-between align-items-start gap-3">
+                            <div>
+                                <div class="report-title-text">${item.title}</div>
+                                <p class="report-meta">${item.category}</p>
+                                <p class="report-meta">${item.location}</p>
+                            </div>
+                            <span class="status-pill status-reported">${item.status}</span>
+                        </div>
+                    `;
+                });
+            }
+
+            const resolvedList = document.getElementById('resolvedList');
+            resolvedList.innerHTML = '';
+
+            if (data.latest_resolved.length === 0) {
+                resolvedList.innerHTML = '<p class="empty-text">Belum ada laporan selesai.</p>';
+            } else {
+                data.latest_resolved.forEach(item => {
+                    resolvedList.innerHTML += `
+                        <div class="report-item d-flex justify-content-between align-items-start gap-3">
+                            <div>
+                                <div class="report-title-text">${item.title}</div>
+                                <p class="report-meta">${item.category}</p>
+                                <p class="report-meta">${item.location}</p>
+                            </div>
+                            <span class="status-pill status-resolved">${item.status}</span>
+                        </div>
+                    `;
+                });
+            }
+        })
+        .catch(error => console.error('Error fetching dashboard data:', error));
+});
+</script>
+{% endblock %}
