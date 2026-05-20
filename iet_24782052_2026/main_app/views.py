@@ -5,6 +5,7 @@ from django.views import View
 from django.urls import reverse_lazy
 from django.shortcuts import get_object_or_404, redirect
 from django.contrib import messages
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 from .models import Report
 from .forms import ReportForm
@@ -23,12 +24,39 @@ class AdminRequiredMixin:
         return super().dispatch(request, *args, **kwargs)
 
 
+class OwnerDraftRequiredMixin:
+    def dispatch(self, request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            messages.error(request, 'Silakan login terlebih dahulu.')
+            return redirect('login')
+
+        report = self.get_object()
+
+        if report.reporter != request.user or report.status != 'DRAFT':
+            messages.error(request, 'Akses ditolak. Laporan hanya dapat diubah atau dihapus oleh pemilik saat status masih DRAFT.')
+            return redirect('report_list')
+
+        return super().dispatch(request, *args, **kwargs)
+
+
 # READ (List)
 class ReportListView(ListView):
     model = Report
     template_name = 'home.html'
     context_object_name = 'reports'
     ordering = ['-id']
+
+    def get_queryset(self):
+        user = self.request.user
+
+        queryset = Report.objects.filter(
+            Q(status__in=['REPORTED', 'VERIFIED', 'IN_PROGRESS', 'RESOLVED'])
+        )
+
+        if user.is_authenticated:
+            queryset = queryset | Report.objects.filter(status='DRAFT', reporter=user)
+
+        return queryset.order_by('-id')
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -64,8 +92,16 @@ class ReportDetailJsonView(View):
 class ReportSearchJsonView(View):
     def get(self, request, *args, **kwargs):
         query = request.GET.get('q', '').strip()
+        user = request.user
 
-        reports = Report.objects.all().order_by('-id')
+        reports = Report.objects.filter(
+            Q(status__in=['REPORTED', 'VERIFIED', 'IN_PROGRESS', 'RESOLVED'])
+        )
+
+        if user.is_authenticated:
+            reports = reports | Report.objects.filter(status='DRAFT', reporter=user)
+
+        reports = reports.order_by('-id')
 
         if query:
             reports = reports.filter(
@@ -82,7 +118,11 @@ class ReportSearchJsonView(View):
                 'category': report.category,
                 'location': report.location,
                 'status': report.status,
-                'can_manage': request.user.is_authenticated and getattr(request.user, 'is_admin', False),
+                'can_manage': (
+                    request.user.is_authenticated
+                    and report.reporter == request.user
+                    and report.status == 'DRAFT'
+                ),
             }
             for report in reports[:50]
         ]
@@ -91,33 +131,40 @@ class ReportSearchJsonView(View):
 
 
 # CREATE
-class ReportCreateView(AdminRequiredMixin, CreateView):
+class ReportCreateView(LoginRequiredMixin, CreateView):
     model = Report
     form_class = ReportForm
     template_name = 'add_report.html'
     success_url = reverse_lazy('report_list')
+    login_url = reverse_lazy('login')
 
     def form_valid(self, form):
+        form.instance.reporter = self.request.user
+        form.instance.status = 'DRAFT'
+
         response = super().form_valid(form)
         messages.success(self.request, 'Laporan berhasil ditambahkan.')
         return response
 
 
 # UPDATE
-class ReportUpdateView(AdminRequiredMixin, UpdateView):
+class ReportUpdateView(OwnerDraftRequiredMixin, UpdateView):
     model = Report
     form_class = ReportForm
     template_name = 'edit_report.html'
     success_url = reverse_lazy('report_list')
 
     def form_valid(self, form):
+        form.instance.reporter = self.request.user
+        form.instance.status = 'DRAFT'
+
         response = super().form_valid(form)
         messages.success(self.request, 'Laporan berhasil diperbarui.')
         return response
 
 
 # DELETE
-class ReportDeleteView(AdminRequiredMixin, DeleteView):
+class ReportDeleteView(OwnerDraftRequiredMixin, DeleteView):
     model = Report
     template_name = 'confirm_delete.html'
     success_url = reverse_lazy('report_list')

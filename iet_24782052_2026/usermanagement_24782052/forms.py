@@ -1,5 +1,6 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
+
 from .models import CustomUser
 
 
@@ -8,7 +9,7 @@ class CustomUserCreationForm(UserCreationForm):
         required=True,
         widget=forms.EmailInput(attrs={
             'class': 'form-control',
-            'placeholder': 'Masukkan email'
+            'placeholder': 'Masukkan email',
         })
     )
 
@@ -18,26 +19,43 @@ class CustomUserCreationForm(UserCreationForm):
         widgets = {
             'username': forms.TextInput(attrs={
                 'class': 'form-control',
-                'placeholder': 'Masukkan username'
+                'placeholder': 'Masukkan username',
             }),
         }
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
+        self.fields['username'].widget.attrs.update({
+            'class': 'form-control',
+            'placeholder': 'Masukkan username',
+        })
+
         self.fields['password1'].widget.attrs.update({
             'class': 'form-control',
-            'placeholder': 'Masukkan password'
+            'placeholder': 'Masukkan password',
         })
+
         self.fields['password2'].widget.attrs.update({
             'class': 'form-control',
-            'placeholder': 'Konfirmasi password'
+            'placeholder': 'Konfirmasi password',
         })
+
+    def clean_email(self):
+        email = self.cleaned_data.get('email')
+
+        if email and CustomUser.objects.filter(email=email).exists():
+            raise forms.ValidationError('Email sudah digunakan.')
+
+        return email
 
     def save(self, commit=True):
         user = super().save(commit=False)
+        user.email = self.cleaned_data.get('email')
         user.is_admin = False
         user.is_member = True
+
         if commit:
             user.save()
+
         return user

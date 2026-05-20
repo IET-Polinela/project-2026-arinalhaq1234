@@ -16,7 +16,7 @@
         </p>
 
         <div class="d-flex justify-content-center gap-3 flex-wrap hero-buttons">
-            {% if user.is_authenticated and user.is_admin %}
+            {% if user.is_authenticated %}
                 <a href="{% url 'report_add' %}" class="btn btn-primary btn-lg shadow">
                     <i class="bi bi-plus-circle me-2"></i>Tambah Laporan
                 </a>
@@ -139,6 +139,11 @@
         font-weight: 700;
     }
 
+    .status-draft {
+        background: #e5e7eb;
+        color: #111827;
+    }
+
     .status-reported {
         background: #e5e7eb;
         color: #374151;
@@ -189,7 +194,7 @@
         <p class="report-subtitle">Kelola dan pantau laporan masyarakat dengan lebih mudah.</p>
     </div>
 
-    {% if user.is_authenticated and user.is_admin %}
+    {% if user.is_authenticated %}
     <a href="{% url 'report_add' %}" class="btn btn-primary">
         <i class="bi bi-plus-circle me-2"></i>Tambah Laporan
     </a>
@@ -219,7 +224,9 @@
                         <td class="fw-semibold">{{ report.title }}</td>
                         <td>{{ report.location }}</td>
                         <td>
-                            {% if report.status == "REPORTED" %}
+                            {% if report.status == "DRAFT" %}
+                                <span class="badge bg-dark status-badge">Draft</span>
+                            {% elif report.status == "REPORTED" %}
                                 <span class="badge bg-secondary status-badge">Reported</span>
                             {% elif report.status == "VERIFIED" %}
                                 <span class="badge bg-primary status-badge">Verified</span>
@@ -227,6 +234,8 @@
                                 <span class="badge bg-warning text-dark status-badge">In Progress</span>
                             {% elif report.status == "RESOLVED" %}
                                 <span class="badge bg-success status-badge">Resolved</span>
+                            {% else %}
+                                <span class="badge bg-secondary status-badge">{{ report.status }}</span>
                             {% endif %}
                         </td>
                         <td>
@@ -235,7 +244,7 @@
                                     <i class="bi bi-eye-fill me-1"></i>Lihat
                                 </button>
 
-                                {% if user.is_authenticated and user.is_admin %}
+                                {% if user.is_authenticated and user == report.reporter and report.status == "DRAFT" %}
                                     <a href="{% url 'report_edit' report.id %}" class="btn btn-info btn-sm text-white">
                                         <i class="bi bi-pencil-square me-1"></i>Edit
                                     </a>
@@ -243,7 +252,9 @@
                                     <a href="{% url 'report_delete' report.id %}" class="btn btn-danger btn-sm">
                                         <i class="bi bi-trash-fill me-1"></i>Hapus
                                     </a>
+                                {% endif %}
 
+                                {% if user.is_authenticated and user.is_admin %}
                                     {% if report.status == "REPORTED" %}
                                         <form method="post" action="{% url 'update_status' report.id %}" class="d-inline">
                                             {% csrf_token %}
@@ -288,7 +299,7 @@
         <h4 class="mb-3">Belum ada laporan</h4>
         <p class="text-muted">Silakan tambahkan laporan pertama untuk mulai menggunakan sistem.</p>
 
-        {% if user.is_authenticated and user.is_admin %}
+        {% if user.is_authenticated %}
         <a href="{% url 'report_add' %}" class="btn btn-primary">
             <i class="bi bi-plus-circle me-2"></i>Tambah Laporan
         </a>
@@ -336,14 +347,16 @@ document.addEventListener('DOMContentLoaded', function () {
     const searchInput = document.getElementById('liveSearchInput');
     const tableBody = document.getElementById('reportTableBody');
     const reportModalElement = document.getElementById('reportDetailModal');
+
+    if (!searchInput || !tableBody || !reportModalElement) return;
+
     const reportModal = new bootstrap.Modal(reportModalElement);
-
-    if (!searchInput || !tableBody) return;
-
     let debounceTimer;
 
     function getStatusBadge(status) {
-        if (status === 'REPORTED') {
+        if (status === 'DRAFT') {
+            return '<span class="badge bg-dark status-badge">Draft</span>';
+        } else if (status === 'REPORTED') {
             return '<span class="badge bg-secondary status-badge">Reported</span>';
         } else if (status === 'VERIFIED') {
             return '<span class="badge bg-primary status-badge">Verified</span>';
@@ -352,11 +365,14 @@ document.addEventListener('DOMContentLoaded', function () {
         } else if (status === 'RESOLVED') {
             return '<span class="badge bg-success status-badge">Resolved</span>';
         }
+
         return `<span class="badge bg-secondary status-badge">${status}</span>`;
     }
 
     function getModalStatusBadge(status) {
-        if (status === 'REPORTED') {
+        if (status === 'DRAFT') {
+            return '<span class="modal-status-pill status-draft">DRAFT</span>';
+        } else if (status === 'REPORTED') {
             return '<span class="modal-status-pill status-reported">REPORTED</span>';
         } else if (status === 'VERIFIED') {
             return '<span class="modal-status-pill status-verified">VERIFIED</span>';
@@ -365,6 +381,7 @@ document.addEventListener('DOMContentLoaded', function () {
         } else if (status === 'RESOLVED') {
             return '<span class="modal-status-pill status-resolved">RESOLVED</span>';
         }
+
         return `<span class="modal-status-pill status-reported">${status}</span>`;
     }
 
@@ -423,14 +440,12 @@ document.addEventListener('DOMContentLoaded', function () {
             fetch(`/reports/search/?q=${encodeURIComponent(query)}`)
                 .then(response => response.json())
                 .then(data => {
-                    console.log(data);
                     renderRows(data.results);
                 })
                 .catch(error => console.error('Live search error:', error));
         }, 400);
     });
 
-    // EVENT DELEGATION
     tableBody.addEventListener('click', function (e) {
         const detailBtn = e.target.closest('.detail-btn');
         if (!detailBtn) return;
@@ -440,8 +455,6 @@ document.addEventListener('DOMContentLoaded', function () {
         fetch(`/detail-json/${reportId}/`)
             .then(response => response.json())
             .then(data => {
-                console.log(data);
-
                 document.getElementById('modalReportTitle').textContent = data.title;
                 document.getElementById('modalReportCategory').textContent = data.category;
                 document.getElementById('modalReportLocation').textContent = data.location;

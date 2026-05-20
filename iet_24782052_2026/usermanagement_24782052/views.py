@@ -19,23 +19,24 @@ class CustomLoginView(LoginView):
         return super().form_invalid(form)
 
     def get_success_url(self):
-        return reverse_lazy('report_list')
+        return '/reports/'
 
 
 class CustomLogoutView(LogoutView):
-    next_page = reverse_lazy('landing')
+    next_page = '/'
 
     def dispatch(self, request, *args, **kwargs):
         messages.success(request, 'Logout berhasil.')
         return super().dispatch(request, *args, **kwargs)
 
 
-def register_view(request):
+def register(request):
     if request.user.is_authenticated:
-        return redirect('report_list')
+        return redirect('/reports/')
 
     if request.method == 'POST':
         form = CustomUserCreationForm(request.POST)
+
         if form.is_valid():
             form.save()
             messages.success(request, 'Registrasi berhasil. Silakan login.')
@@ -44,3 +45,7 @@ def register_view(request):
         form = CustomUserCreationForm()
 
     return render(request, 'registration/register.html', {'form': form})
+
+
+def register_view(request):
+    return register(request)
