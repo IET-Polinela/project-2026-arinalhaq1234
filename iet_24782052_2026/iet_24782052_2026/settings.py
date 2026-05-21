@@ -5,6 +5,7 @@ Django settings for iet_24782052_2026 project.
 from pathlib import Path
 from datetime import timedelta
 
+
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
@@ -21,19 +22,22 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
+    # Third-party apps
+    'corsheaders',
     'rest_framework',
     'rest_framework_simplejwt',
 
+    # Local apps
     'main_app',
     'about',
     'contacts',
-    'usermanagement_24782052',
+    'usermanagement_24782052.apps.Usermanagement24782052Config',
     'dashboard_24782052',
-    
 ]
 
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -50,7 +54,9 @@ ROOT_URLCONF = 'iet_24782052_2026.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'templates'],
+        'DIRS': [
+            BASE_DIR / 'templates',
+        ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -92,6 +98,20 @@ REST_FRAMEWORK = {
 }
 
 
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(hours=1),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
+}
+
+
+CORS_ALLOW_ALL_ORIGINS = True
+
+
+LOGIN_URL = 'login'
+LOGIN_REDIRECT_URL = '/reports/'
+LOGOUT_REDIRECT_URL = '/'
+
+
 AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
@@ -124,12 +144,3 @@ STATIC_ROOT = BASE_DIR / 'staticfiles'
 
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
-LOGIN_URL = 'login'
-LOGIN_REDIRECT_URL = '/reports/'
-LOGOUT_REDIRECT_URL = '/'
-
-SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(hours=1),
-    'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
-}
