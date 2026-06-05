@@ -3,10 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Citizen Portal | Punggur City</title>
 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <title>Smart City Citizen Portal</title>
+
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css"
+        rel="stylesheet"
+    >
+
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
+        rel="stylesheet"
+    >
 
     <style>
         body {
@@ -20,18 +28,18 @@
         .brand-icon {
             width: 38px;
             height: 38px;
-            border-radius: 12px;
-            background: rgba(255,255,255,0.18);
             display: inline-flex;
             align-items: center;
             justify-content: center;
             margin-right: 10px;
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.18);
         }
 
         .page-card {
             border: none;
             border-radius: 22px;
-            box-shadow: 0 12px 30px rgba(0,0,0,0.08);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
         }
 
         .login-card {
@@ -49,152 +57,112 @@
         }
 
         .status-pill {
-            border-radius: 999px;
+            display: inline-block;
             padding: 7px 12px;
+            border-radius: 999px;
             font-size: 0.85rem;
             font-weight: 700;
         }
 
         .status-draft {
-            background: #e5e7eb;
             color: #111827;
+            background: #e5e7eb;
         }
 
         .status-reported {
-            background: #dbeafe;
             color: #1d4ed8;
+            background: #dbeafe;
         }
 
         .status-verified {
-            background: #dcfce7;
             color: #166534;
+            background: #dcfce7;
         }
 
         .status-progress {
-            background: #fef3c7;
             color: #92400e;
+            background: #fef3c7;
         }
 
         .status-resolved {
-            background: #d1fae5;
             color: #047857;
+            background: #d1fae5;
         }
 
         .top-nav-link {
-            color: rgba(255, 255, 255, 0.9);
-            text-decoration: none;
-            font-weight: 600;
-            font-size: 1rem;
-            padding: 8px 2px;
-            position: relative;
-            transition: 0.2s ease-in-out;
             display: inline-block;
+            padding: 8px 2px;
+            border: none;
+            color: rgba(255, 255, 255, 0.9);
+            background: transparent;
+            text-decoration: none;
+            font-size: 1rem;
+            font-weight: 600;
         }
 
         .top-nav-link:hover {
             color: #ffffff;
         }
 
-        .top-nav-link.active {
-            color: #ffffff;
-        }
-
-        .top-nav-link.active::after {
-            content: "";
-            position: absolute;
-            left: 0;
-            bottom: -2px;
-            width: 100%;
-            height: 3px;
-            border-radius: 999px;
-            background: #ffffff;
-        }
-
         .profile-dropdown-btn {
-            border: 1px solid rgba(255, 255, 255, 0.25);
-            background: rgba(255, 255, 255, 0.18);
-            color: #ffffff;
-            border-radius: 999px;
-            padding: 6px;
             width: 48px;
             height: 48px;
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            font-weight: 600;
-            transition: 0.2s ease-in-out;
-        }
-
-        .profile-dropdown-btn:hover,
-        .profile-dropdown-btn:focus,
-        .profile-dropdown-btn.show {
-            background: rgba(255, 255, 255, 0.26);
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            border-radius: 999px;
             color: #ffffff;
-            border-color: rgba(255, 255, 255, 0.35);
+            background: rgba(255, 255, 255, 0.18);
         }
 
         .profile-avatar {
             width: 34px;
             height: 34px;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.25);
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            font-size: 1rem;
-        }
-
-        .profile-name {
-            display: none;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.25);
         }
 
         .profile-menu {
             min-width: 240px;
+            padding: 10px;
             border: none;
             border-radius: 18px;
             box-shadow: 0 12px 28px rgba(0, 0, 0, 0.14);
-            padding: 10px;
         }
 
         .profile-menu-header {
             padding: 10px 12px;
+            margin-bottom: 8px;
             border-radius: 14px;
             background: #f8f9fa;
-            margin-bottom: 8px;
         }
 
-        .profile-menu-header .small-label {
-            font-size: 0.8rem;
+        .small-label {
             color: #6c757d;
-            margin-bottom: 2px;
+            font-size: 0.8rem;
         }
 
-        .profile-menu-header .username {
-            font-weight: 700;
+        .username {
             color: #212529;
+            font-weight: 700;
         }
 
-        .dropdown-item.custom-item {
-            border-radius: 12px;
-            padding: 10px 12px;
-            font-weight: 500;
-        }
-
-        .dropdown-item.custom-item:hover {
-            background: #f1f5ff;
+        .progress {
+            height: 18px;
         }
 
         @media (max-width: 991px) {
             .sticky-panel {
                 position: static;
             }
-
-            .top-nav-area {
-                margin-top: 14px;
-            }
         }
     </style>
 </head>
+
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark shadow-sm">
         <div class="container-fluid px-4">
@@ -202,57 +170,65 @@
                 <span class="brand-icon">
                     <i class="bi bi-buildings-fill"></i>
                 </span>
+
                 Smart City Citizen Portal
             </a>
 
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
+            <button
+                class="navbar-toggler"
+                type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#navMenu"
+            >
                 <span class="navbar-toggler-icon"></span>
             </button>
 
             <div id="navMenu" class="collapse navbar-collapse">
-                <div class="ms-auto d-flex gap-4 align-items-center flex-wrap top-nav-area">
-                    <a id="dashboardNavLink" href="#dashboard" class="top-nav-link">Dashboard</a>
-                    <a id="createReportNavLink" href="#create-report" class="top-nav-link">Tambah Laporan</a>
+                <div class="ms-auto d-flex gap-4 align-items-center flex-wrap">
+                    <a href="#dashboard" class="top-nav-link">
+                        Dashboard
+                    </a>
+
+                    <button
+                        type="button"
+                        class="top-nav-link"
+                        onclick="openCreateReportModal()"
+                    >
+                        Tambah Laporan
+                    </button>
 
                     <div id="userDropdownWrapper" class="dropdown d-none">
                         <button
                             class="btn profile-dropdown-btn"
                             type="button"
-                            id="userDropdownButton"
                             data-bs-toggle="dropdown"
-                            aria-expanded="false"
                         >
                             <span class="profile-avatar">
                                 <i class="bi bi-person-fill"></i>
                             </span>
-                            <span id="navbarUsername" class="profile-name">Citizen</span>
                         </button>
 
-                        <ul class="dropdown-menu dropdown-menu-end profile-menu" aria-labelledby="userDropdownButton">
+                        <ul class="dropdown-menu dropdown-menu-end profile-menu">
                             <li>
                                 <div class="profile-menu-header">
-                                    <div class="small-label">Login sebagai</div>
-                                    <div id="dropdownUsername" class="username">Citizen</div>
+                                    <div class="small-label">
+                                        Login sebagai
+                                    </div>
+
+                                    <div id="dropdownUsername" class="username">
+                                        Citizen
+                                    </div>
                                 </div>
                             </li>
 
                             <li>
-                                <a href="#dashboard" class="dropdown-item custom-item">
-                                    <i class="bi bi-speedometer2 me-2"></i>Dashboard
-                                </a>
-                            </li>
-
-                            <li>
-                                <a href="#create-report" class="dropdown-item custom-item">
-                                    <i class="bi bi-plus-circle me-2"></i>Tambah Laporan
-                                </a>
-                            </li>
-
-                            <li><hr class="dropdown-divider"></li>
-
-                            <li>
-                                <button id="logoutBtn" class="dropdown-item custom-item text-danger" type="button">
-                                    <i class="bi bi-box-arrow-right me-2"></i>Logout
+                                <button
+                                    id="logoutBtn"
+                                    type="button"
+                                    class="dropdown-item text-danger"
+                                >
+                                    <i class="bi bi-box-arrow-right me-2"></i>
+                                    Logout
                                 </button>
                             </li>
                         </ul>
@@ -266,10 +242,11 @@
         <div id="app-content"></div>
     </main>
 
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js"></script>
+
     <script src="js/api.js"></script>
     <script src="js/auth.js"></script>
     <script src="js/app.js"></script>
     <script src="js/router.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

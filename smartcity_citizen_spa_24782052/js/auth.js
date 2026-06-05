@@ -3,28 +3,33 @@ function isLoggedIn() {
 }
 
 function updateNavbarUserInfo() {
-    const userDropdownWrapper = document.getElementById("userDropdownWrapper");
-    const navbarUsername = document.getElementById("navbarUsername");
-    const dropdownUsername = document.getElementById("dropdownUsername");
+    const userDropdownWrapper =
+        document.getElementById("userDropdownWrapper");
 
-    if (!userDropdownWrapper || !navbarUsername || !dropdownUsername) {
+    const dropdownUsername =
+        document.getElementById("dropdownUsername");
+
+    const savedUsername =
+        localStorage.getItem("logged_in_username") || "Citizen";
+
+    if (dropdownUsername) {
+        dropdownUsername.textContent = savedUsername;
+    }
+
+    if (!userDropdownWrapper) {
         return;
     }
 
     if (isLoggedIn()) {
-        const savedUsername = localStorage.getItem("logged_in_username") || "Citizen";
-        navbarUsername.textContent = savedUsername;
-        dropdownUsername.textContent = savedUsername;
         userDropdownWrapper.classList.remove("d-none");
     } else {
-        navbarUsername.textContent = "Citizen";
-        dropdownUsername.textContent = "Citizen";
         userDropdownWrapper.classList.add("d-none");
     }
 }
 
 function setupLoginForm() {
-    const loginForm = document.getElementById("loginForm");
+    const loginForm =
+        document.getElementById("loginForm");
 
     if (!loginForm) {
         return;
@@ -33,50 +38,76 @@ function setupLoginForm() {
     loginForm.addEventListener("submit", async function (event) {
         event.preventDefault();
 
-        const usernameInput = document.getElementById("loginUsername");
-        const passwordInput = document.getElementById("loginPassword");
-        const loginMessage = document.getElementById("loginMessage");
+        const usernameInput =
+            document.getElementById("loginUsername");
+
+        const passwordInput =
+            document.getElementById("loginPassword");
+
+        const loginMessage =
+            document.getElementById("loginMessage");
 
         const payload = {
-            username: usernameInput.value,
+            username: usernameInput.value.trim(),
             password: passwordInput.value,
         };
 
         loginMessage.innerHTML = `
             <div class="alert alert-info">
-                <i class="bi bi-hourglass-split me-2"></i>Sedang login...
+                <i class="bi bi-hourglass-split me-2"></i>
+                Sedang login...
             </div>
         `;
 
-        const result = await requestAPI("/api/token/", "POST", payload);
+        const result = await requestAPI(
+            "/api/token/",
+            "POST",
+            payload
+        );
 
-        if (result.ok && result.status === 200) {
-            localStorage.setItem("access_token", result.data.access);
-            localStorage.setItem("refresh_token", result.data.refresh);
-            localStorage.setItem("logged_in_username", payload.username);
+        if (
+            result.ok &&
+            result.status === 200 &&
+            result.data &&
+            result.data.access
+        ) {
+            localStorage.setItem(
+                "access_token",
+                result.data.access
+            );
 
-            loginMessage.innerHTML = `
-                <div class="alert alert-success">
-                    <i class="bi bi-check-circle-fill me-2"></i>Login berhasil.
-                </div>
-            `;
+            localStorage.setItem(
+                "refresh_token",
+                result.data.refresh || ""
+            );
+
+            localStorage.setItem(
+                "logged_in_username",
+                payload.username
+            );
 
             updateNavbarUserInfo();
-            alert("Login berhasil.");
+
             window.location.hash = "#dashboard";
+
             return;
         }
 
         loginMessage.innerHTML = `
             <div class="alert alert-danger">
-                <i class="bi bi-exclamation-triangle-fill me-2"></i>Login gagal. Periksa username dan password.
+                <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                Login gagal. Periksa username, password,
+                dan pastikan backend Django sudah berjalan.
             </div>
         `;
+
+        console.log("Login gagal:", result);
     });
 }
 
 function setupLogoutButton() {
-    const logoutBtn = document.getElementById("logoutBtn");
+    const logoutBtn =
+        document.getElementById("logoutBtn");
 
     updateNavbarUserInfo();
 
@@ -85,13 +116,10 @@ function setupLogoutButton() {
     }
 
     logoutBtn.onclick = function () {
-        localStorage.removeItem("access_token");
-        localStorage.removeItem("refresh_token");
-        localStorage.removeItem("logged_in_username");
+        clearLoginSession();
 
-        updateNavbarUserInfo();
-        alert("Logout berhasil.");
         window.location.hash = "#login";
-        location.reload();
+
+        window.location.reload();
     };
 }
