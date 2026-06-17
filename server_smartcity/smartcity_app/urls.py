@@ -5,7 +5,12 @@ from rest_framework_simplejwt.views import (
     TokenObtainPairView,
     TokenRefreshView,
 )
+from drf_spectacular.views import (
+    SpectacularAPIView,
+    SpectacularSwaggerView,
+)
 
+from django_scalar.views import scalar_viewer
 from usermanagement_24782052.api_views import RegisterView
 from usermanagement_24782052 import views as user_views
 
@@ -13,6 +18,16 @@ from usermanagement_24782052 import views as user_views
 urlpatterns = [
     path("admin/", admin.site.urls),
 
+    path('api/schema/', SpectacularAPIView.as_view(), name='schema'),
+
+    path(
+    'api/docs/swagger/',
+    SpectacularSwaggerView.as_view(url_name='schema'),
+    name='swagger-ui',
+    ),
+
+    path('api/docs/scalar/', scalar_viewer, name='scalar-ui'),
+    
     # Halaman Django biasa
     path("", include("main_app.urls")),
     path("about/", include("about.urls")),
