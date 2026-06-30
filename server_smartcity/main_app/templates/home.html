@@ -202,7 +202,7 @@
 </div>
 
 <div class="search-box">
-    <input type="text" id="liveSearchInput" class="form-control" placeholder="Cari judul, kategori, lokasi, atau status laporan...">
+    <input type="text" id="searchInput" class="form-control" placeholder="Cari judul, kategori, lokasi, atau status laporan...">
 </div>
 
 {% if reports %}
@@ -344,7 +344,7 @@
 
 <script>
 document.addEventListener('DOMContentLoaded', function () {
-    const searchInput = document.getElementById('liveSearchInput');
+    const searchInput = document.getElementById('searchInput');
     const tableBody = document.getElementById('reportTableBody');
     const reportModalElement = document.getElementById('reportDetailModal');
 

@@ -71,13 +71,13 @@ const routes = {
                             Ringkasan laporan milik akun login.
                         </p>
 
-                        <div class="list-group">
+                        <div id="summaryStats" class="list-group">
                             <div class="list-group-item d-flex justify-content-between">
                                 <span>Draft</span>
 
                                 <span
                                     id="draftCount"
-                                    class="badge text-bg-secondary rounded-pill"
+                                    class="badge bg-secondary rounded-pill"
                                 >
                                     0
                                 </span>
@@ -149,7 +149,7 @@ const routes = {
                             </button>
 
                             <button
-                                id="feedTabBtn"
+                                id="tabFeedKota"
                                 type="button"
                                 class="btn btn-outline-primary"
                                 onclick="loadDashboardData('feed', 1)"
@@ -159,6 +159,7 @@ const routes = {
                             </button>
 
                             <button
+                                id="btnBukaModal"
                                 type="button"
                                 class="btn btn-success ms-auto"
                                 onclick="openCreateReportModal()"
@@ -168,7 +169,7 @@ const routes = {
                             </button>
                         </div>
 
-                        <div id="reportList"></div>
+                        <div id="listContainer"></div>
 
                         <div
                             id="paginationContainer"
@@ -210,10 +211,10 @@ const routes = {
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5
-                            id="reportModalTitle"
+                            id="reportModalLabel"
                             class="modal-title"
                         >
-                            Tambah Laporan Baru
+                            Buat Laporan Baru
                         </h5>
 
                         <button
@@ -232,7 +233,7 @@ const routes = {
 
                                 <input
                                     type="text"
-                                    id="reportTitle"
+                                    id="inputTitle"
                                     class="form-control"
                                     required
                                 >
@@ -243,12 +244,20 @@ const routes = {
                                     Kategori
                                 </label>
 
-                                <input
-                                    type="text"
-                                    id="reportCategory"
+                                <select
+                                    id="inputCategory"
                                     class="form-control"
                                     required
                                 >
+                                    <option value="" selected disabled>
+                                        Pilih kategori
+                                    </option>
+                                    <option value="Infrastruktur">Infrastruktur</option>
+                                    <option value="Kebersihan">Kebersihan</option>
+                                    <option value="Transportasi">Transportasi</option>
+                                    <option value="Keamanan">Keamanan</option>
+                                    <option value="Lainnya">Lainnya</option>
+                                </select>
                             </div>
 
                             <div class="mb-3">
@@ -257,7 +266,7 @@ const routes = {
                                 </label>
 
                                 <textarea
-                                    id="reportDescription"
+                                    id="inputDescription"
                                     class="form-control"
                                     rows="4"
                                     required
@@ -271,7 +280,7 @@ const routes = {
 
                                 <input
                                     type="text"
-                                    id="reportLocation"
+                                    id="inputLocation"
                                     class="form-control"
                                     required
                                 >
@@ -289,6 +298,7 @@ const routes = {
                         </button>
 
                         <button
+                            id="btnDraft"
                             type="button"
                             class="btn btn-warning"
                             onclick="submitReport('DRAFT')"
@@ -297,6 +307,7 @@ const routes = {
                         </button>
 
                         <button
+                            id="btnSubmit"
                             type="button"
                             class="btn btn-primary"
                             onclick="submitReport('REPORTED')"

@@ -1,4 +1,8 @@
-const API_BASE_URL = "http://103.151.63.86:8005";
+const LOCAL_HOSTS = ["localhost", "127.0.0.1"];
+
+const API_BASE_URL = LOCAL_HOSTS.includes(window.location.hostname)
+    ? "http://127.0.0.1:8000"
+    : "http://103.151.63.86:8005";
 
 function clearLoginSession() {
     localStorage.removeItem("access_token");

@@ -61,7 +61,7 @@ function updateActiveTabButton() {
         document.getElementById("myReportsTabBtn");
 
     const feedButton =
-        document.getElementById("feedTabBtn");
+        document.getElementById("tabFeedKota");
 
     if (!myReportsButton || !feedButton) {
         return;
@@ -81,7 +81,7 @@ async function loadDashboardData(tab = "my_reports", page = 1) {
     currentPage = page;
 
     const reportList =
-        document.getElementById("reportList");
+        document.getElementById("listContainer");
 
     const reportCount =
         document.getElementById("reportCount");
@@ -137,7 +137,7 @@ async function loadDashboardData(tab = "my_reports", page = 1) {
 
 function renderList(reports) {
     const reportList =
-        document.getElementById("reportList");
+        document.getElementById("listContainer");
 
     if (!reportList) {
         return;
@@ -177,7 +177,7 @@ function renderList(reports) {
                 : "";
 
         return `
-            <div class="border rounded-4 p-3 mb-3 bg-white shadow-sm">
+            <div class="col border rounded-4 p-3 mb-3 bg-white shadow-sm">
                 <div class="d-flex justify-content-between gap-3 flex-wrap">
                     <div>
                         <h6 class="fw-bold mb-1">
@@ -329,7 +329,7 @@ function openCreateReportModal() {
         document.getElementById("reportForm");
 
     const modalTitle =
-        document.getElementById("reportModalTitle");
+        document.getElementById("reportModalLabel");
 
     if (!modalElement || !form || !modalTitle) {
         window.location.hash = "#dashboard";
@@ -342,7 +342,7 @@ function openCreateReportModal() {
     form.reset();
 
     modalTitle.textContent =
-        "Tambah Laporan Baru";
+        "Buat Laporan Baru";
 
     const modal =
         bootstrap.Modal.getOrCreateInstance(
@@ -368,19 +368,34 @@ async function editDraft(id) {
 
     const report = result.data;
 
-    document.getElementById("reportTitle").value =
+    document.getElementById("inputTitle").value =
         report.title || "";
 
-    document.getElementById("reportCategory").value =
-        report.category || "";
+    const categoryInput =
+        document.getElementById("inputCategory");
 
-    document.getElementById("reportDescription").value =
+    const category = report.category || "";
+
+    if (
+        category &&
+        !Array.from(categoryInput.options).some(
+            (option) => option.value === category
+        )
+    ) {
+        categoryInput.add(
+            new Option(category, category)
+        );
+    }
+
+    categoryInput.value = category;
+
+    document.getElementById("inputDescription").value =
         report.description || "";
 
-    document.getElementById("reportLocation").value =
+    document.getElementById("inputLocation").value =
         report.location || "";
 
-    document.getElementById("reportModalTitle").textContent =
+    document.getElementById("reportModalLabel").textContent =
         "Edit Draft Laporan";
 
     editingReportId = id;
@@ -406,16 +421,16 @@ async function submitReport(status) {
 
     const payload = {
         title:
-            document.getElementById("reportTitle").value,
+            document.getElementById("inputTitle").value,
 
         category:
-            document.getElementById("reportCategory").value,
+            document.getElementById("inputCategory").value,
 
         description:
-            document.getElementById("reportDescription").value,
+            document.getElementById("inputDescription").value,
 
         location:
-            document.getElementById("reportLocation").value,
+            document.getElementById("inputLocation").value,
 
         status: status,
     };

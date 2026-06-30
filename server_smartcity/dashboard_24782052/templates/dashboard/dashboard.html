@@ -382,7 +382,7 @@
             <div class="card list-card h-100">
                 <div class="card-body">
                     <h5 class="panel-title mb-3">🆕 Laporan Terbaru</h5>
-                    <div id="reportedList"></div>
+                    <div id="reportedTable"></div>
                 </div>
             </div>
         </div>
@@ -391,7 +391,7 @@
             <div class="card list-card h-100">
                 <div class="card-body">
                     <h5 class="panel-title mb-3">✅ Laporan Selesai</h5>
-                    <div id="resolvedList"></div>
+                    <div id="resolvedTable"></div>
                 </div>
             </div>
         </div>
@@ -527,7 +527,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
             });
 
-            const reportedList = document.getElementById('reportedList');
+            const reportedList = document.getElementById('reportedTable');
             reportedList.innerHTML = '';
 
             if (data.latest_reported.length === 0) {
@@ -547,7 +547,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 });
             }
 
-            const resolvedList = document.getElementById('resolvedList');
+            const resolvedList = document.getElementById('resolvedTable');
             resolvedList.innerHTML = '';
 
             if (data.latest_resolved.length === 0) {

@@ -1,15 +1,28 @@
 from django.http import JsonResponse
 from django.views.generic import TemplateView, View
 from django.db.models import Count
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 
 from main_app.models import Report
 
 
-class DashboardView(TemplateView):
+class AdminOnlyMixin(LoginRequiredMixin, UserPassesTestMixin):
+    login_url = "login"
+
+    def test_func(self):
+        user = self.request.user
+        return (
+            user.is_staff
+            or user.is_superuser
+            or getattr(user, "is_admin", False)
+        )
+
+
+class DashboardView(AdminOnlyMixin, TemplateView):
     template_name = 'dashboard/dashboard.html'
 
 
-class DashboardStatsJsonView(View):
+class DashboardStatsJsonView(AdminOnlyMixin, View):
     def get(self, request, *args, **kwargs):
         total_reports = Report.objects.count()
         total_reported = Report.objects.filter(status='REPORTED').count()

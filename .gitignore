@@ -1,2 +1,17 @@
-Add-Content .gitignore "`n__pycache__/"
-Add-Content .gitignore "*.pyc"
+# Python
+__pycache__/
+*.py[cod]
+.coverage
+htmlcov/
+
+# Node and Playwright generated files
+node_modules/
+playwright-report/
+test-results/
+
+# Local reports and environment files
+*.docx
+.env
+
+# Django generated files
+staticfiles/
